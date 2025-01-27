@@ -1,0 +1,72 @@
+import React, { useState } from 'react';
+
+function EVMCalculator() {
+  const [plannedValue, setPlannedValue] = useState('');
+  const [earnedValue, setEarnedValue] = useState('');
+  const [actualCost, setActualCost] = useState('');
+  const [results, setResults] = useState(null);
+
+  const calculateEVM = () => {
+    const PV = parseFloat(plannedValue);
+    const EV = parseFloat(earnedValue);
+    const AC = parseFloat(actualCost);
+
+    if (isNaN(PV) || isNaN(EV) || isNaN(AC)) {
+      alert('Please enter valid numbers.');
+      return;
+    }
+
+    const CPI = EV / AC;
+    const SPI = EV / PV;
+    const CV = EV - AC;
+    const SV = EV - PV;
+
+    setResults({ CPI, SPI, CV, SV });
+  };
+
+  return (
+    <div className="p-8">
+      <h1 className="text-2xl font-bold mb-4">Earned Value Management (EVM) Calculator</h1>
+      <div className="grid gap-4 max-w-md mx-auto">
+        <input
+          type="number"
+          placeholder="Planned Value (PV)"
+          value={plannedValue}
+          onChange={(e) => setPlannedValue(e.target.value)}
+          className="border p-2 rounded"
+        />
+        <input
+          type="number"
+          placeholder="Earned Value (EV)"
+          value={earnedValue}
+          onChange={(e) => setEarnedValue(e.target.value)}
+          className="border p-2 rounded"
+        />
+        <input
+          type="number"
+          placeholder="Actual Cost (AC)"
+          value={actualCost}
+          onChange={(e) => setActualCost(e.target.value)}
+          className="border p-2 rounded"
+        />
+        <button
+          onClick={calculateEVM}
+          className="bg-green-500 text-white px-4 py-2 rounded"
+        >
+          Calculate
+        </button>
+      </div>
+      {results && (
+        <div className="mt-6">
+          <h2 className="text-xl font-bold mb-2">Results:</h2>
+          <p>CPI: {results.CPI.toFixed(2)}</p>
+          <p>SPI: {results.SPI.toFixed(2)}</p>
+          <p>Cost Variance (CV): {results.CV.toFixed(2)}</p>
+          <p>Schedule Variance (SV): {results.SV.toFixed(2)}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default EVMCalculator;
